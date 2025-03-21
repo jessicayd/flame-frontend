@@ -1,4 +1,5 @@
 import { useState } from "react";
+import mock_image from './mock_image.png';
 
 const MOCK_MODE = false;
 
@@ -18,7 +19,8 @@ export function useFileProcessing() {
         table_data: [
           { ID: "1", Name: "Coin A", Latitude: "40.7128", Longitude: "-74.0060" },
           { ID: "2", Name: "Coin B", Latitude: "34.0522", Longitude: "-118.2437" }
-        ]
+        ],
+        image: mock_image
       }
     ]
   };
@@ -98,22 +100,31 @@ export function useFileProcessing() {
     }
 
     try {
-      const formattedTables = tables.map((table: any, idx: number) => {
-        const orderedColumns = table.headers;
-        const reorderedData = table.table_data.map((row: any) => {
-          const newRow: { [key: string]: any } = {};
-          orderedColumns.forEach((col: string) => {
-            newRow[col] = row[col];
+      const formattedTables = tables
+        .map((table: any, idx: number) => {
+          if (table.include === false) return null; // skip excluded tables
+  
+          const orderedColumns = table.headers;
+          const reorderedData = table.table_data.map((row: any) => {
+            const newRow: { [key: string]: any } = {};
+            orderedColumns.forEach((col: string) => {
+              newRow[col] = row[col];
+            });
+            return newRow;
           });
-          return newRow;
-        });
-
-        return {
-          headers: orderedColumns,
-          table_data: reorderedData,
-          header_mappings: mappings[idx],
-        };
-      });
+  
+          return {
+            headers: orderedColumns,
+            table_data: reorderedData,
+            header_mappings: mappings[idx],
+          };
+        })
+        .filter(Boolean); // remove nulls
+  
+      if (formattedTables.length === 0) {
+        alert("No tables selected for export.");
+        return;
+      }
 
       const response = await fetch('/api/export-csv', {
         method: "POST",

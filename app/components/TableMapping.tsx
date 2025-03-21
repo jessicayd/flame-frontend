@@ -1,12 +1,66 @@
-import { Box, Button, Typography, Card, CardContent, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  Card,
+  CardContent,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 
-const TableMapping = ({ tables, currentTableIndex, mappings, handleMappingChange, predefinedOptions, handlePrevTable, handleNextTable, handleDownloadCSV, handleReset }) => {
+const TableMapping = ({
+  tables,
+  currentTableIndex,
+  mappings,
+  handleMappingChange,
+  predefinedOptions,
+  handlePrevTable,
+  handleNextTable,
+  handleDownloadCSV,
+  handleReset,
+  setTables 
+}) => {
+  const currentTable = tables[currentTableIndex];
+
+  const handleIncludeToggle = (checked) => {
+    const updatedTables = [...tables];
+    updatedTables[currentTableIndex].include = checked;
+    setTables(updatedTables);
+  };
+
   return (
     <Card sx={{ maxWidth: 600, width: '100%', mt: 4 }}>
       <CardContent>
         <Typography variant="h4">Table {currentTableIndex + 1} of {tables.length}</Typography>
-        
-        {tables[currentTableIndex].headers.map((header) => (
+
+        {/* Image preview if available */}
+        {currentTable.image && (
+          <Box display="flex" justifyContent="center" my={2}>
+            <img
+              src={`data:image/png;base64,${currentTable.image}`}
+              alt={`Table ${currentTableIndex + 1}`}
+              style={{ maxWidth: "100%", border: "1px solid #ccc", borderRadius: 4 }}
+            />
+          </Box>
+        )}
+
+        {/* Checkbox to include table */}
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={currentTable.include !== false}
+              onChange={(e) => handleIncludeToggle(e.target.checked)}
+            />
+          }
+          label="Include this table in export"
+        />
+
+        {/* Mapping inputs */}
+        {currentTable.headers.map((header) => (
           <FormControl key={header} fullWidth sx={{ my: 2 }}>
             <InputLabel>{header}</InputLabel>
             <Select

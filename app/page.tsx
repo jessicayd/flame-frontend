@@ -64,7 +64,9 @@ export default function Home() {
           handleNextTable={() => handleNextTable(currentTableIndex, setCurrentTableIndex, tables)}
           handleDownloadCSV={() => handleDownloadCSV(tables, mappings)}
           handleReset={() => handleReset(setIsUploaded, setTables, setMappings, setCurrentTableIndex, setUseOCR, setFilePath, setIsDownloadComplete)}
+          setTables={setTables}
         />
+
       )}
 
       {!isUploaded && isDownloadComplete && filePath && (
