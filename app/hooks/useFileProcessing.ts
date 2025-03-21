@@ -1,8 +1,5 @@
 import { useState } from "react";
 
-// const API_BASE = "http://127.0.0.1:5000";
-const API_BASE = "";
-
 const MOCK_MODE = false;
 
 export function useFileProcessing() {
@@ -43,7 +40,7 @@ export function useFileProcessing() {
       setMappings(
         mockExtractTablesResponse.tables.reduce((acc, table, index) => {
           acc[index] = table.headers.reduce((subAcc, header) => {
-            subAcc[header] = ""; // Default empty mapping
+            subAcc[header] = ""; 
             return subAcc;
           }, {} as { [key: string]: string });
           return acc;
@@ -60,7 +57,7 @@ export function useFileProcessing() {
     formData.append("useOCR", useOCR.toString());
 
     try {
-      const response = await fetch(`${API_BASE}/api/extract-tables`, {
+      const response = await fetch('/api/extract-tables', {
         method: "POST",
         body: formData,
       });
@@ -78,7 +75,7 @@ export function useFileProcessing() {
       setMappings(
         jsonResponse.tables.reduce((acc, table, index) => {
           acc[index] = table.headers.reduce((subAcc, header) => {
-            subAcc[header] = ""; // Default empty mapping
+            subAcc[header] = ""; 
             return subAcc;
           }, {} as { [key: string]: string });
           return acc;
@@ -118,7 +115,7 @@ export function useFileProcessing() {
         };
       });
 
-      const response = await fetch(`${API_BASE}/api/export-csv`, {
+      const response = await fetch('/api/export-csv', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tables: formattedTables }),
