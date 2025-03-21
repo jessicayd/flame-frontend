@@ -24,7 +24,7 @@ export default function FileUpload() {
   const [mappings, setMappings] = useState<{ [key: number]: { [key: string]: string } }>({});
   const [currentTableIndex, setCurrentTableIndex] = useState(0);
   const [useOCR, setUseOCR] = useState(false);
-  const predefinedOptions = ["placeholder1", "placeholder2", "placeholder3"];
+  const predefinedOptions = ["ID", "Name", "Latitude", "Longitude", "Start_Year", "End_Year", "Num_Coins_Found", "Reference", "Comment", "External_Link"];
   const [filePath, setFilePath] = useState<string | null>(null);
   const [isDownloadComplete, setIsDownloadComplete] = useState(false);
 
